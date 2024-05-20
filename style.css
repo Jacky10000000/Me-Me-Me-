@@ -171,3 +171,61 @@ body {
     text-align: center;
     transition: color 0.2s;
 }
+
+/*----------------------------------------------------
+      The Three Lunatics
+------------------------------------------------------*/
+
+.profile-image {
+    max-width: 50%; /* Ensure the image doesn't exceed its container's width */
+    max-height: 50%; /* Ensure the image doesn't exceed its container's height */
+    object-fit: contain; /* Maintain aspect ratio and fit the entire image within the container */
+}
+.carousel {
+    position: relative;
+    max-width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+}
+
+.carousel-track-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    transition: transform 0.5s ease;
+    display: flex;
+    justify-content: center; /* Center the image within the slide */
+    align-items: center;    /* Center the image vertically within the slide */
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}

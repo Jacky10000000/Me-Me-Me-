@@ -64,26 +64,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 FLASHLIGHT FUNCTION 
  -------------------------------------------------*/
 
-
-
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
+    const scene = document.querySelector('.scene');
     const navSection = document.querySelector('.nav');
     const mythSection = document.querySelector('.theMyth');
-    const scene = document.querySelector('.scene');
+
+    if (scene && navSection && mythSection) {
+        scene.addEventListener('animationend', function() {
+            navSection.classList.remove('hidden');
+            mythSection.classList.remove('hidden');
+        });
+    }
+
     const flashlight = document.createElement('div');
     flashlight.classList.add('flashlight');
     document.body.appendChild(flashlight);
-
-    scene.addEventListener('animationend', function() {
-        navSection.classList.remove('hidden');
-        mythSection.classList.remove('hidden');
-    });
 
     document.addEventListener('mousemove', function(e) {
         flashlight.style.left = `${e.pageX - flashlight.offsetWidth / 2}px`;
         flashlight.style.top = `${e.pageY - flashlight.offsetHeight / 2}px`;
 
-        const elements = document.querySelectorAll('h1, h2, h4, h3, p, figcaption, nav a');
+        const elements = document.querySelectorAll('h1, h2, h3, h4, p, figcaption, nav a');
         let flashlightZIndex = -1; // Initial z-index for the flashlight
 
         elements.forEach(el => {
@@ -128,58 +129,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+/*-------------------------------------------------------------------------
+                                  CARASEL
+---------------------------------------------------------------------------*/
+
+// carousel.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Add flashlight element to the body
-    const flashlight = document.createElement('div');
-    flashlight.classList.add('flashlight');
-    document.body.appendChild(flashlight);
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(track.children);
+    const nextButton = document.querySelector('.next');
+    const prevButton = document.querySelector('.prev');
+    
+    const setSlidePosition = (slide, index) => {
+        slide.style.left = `${index * 100}%`;
+    };
 
-    // Handle flashlight movement
-    document.addEventListener('mousemove', function(e) {
-        flashlight.style.left = `${e.pageX - flashlight.offsetWidth / 2}px`;
-        flashlight.style.top = `${e.pageY - flashlight.offsetHeight / 2}px`;
+    slides.forEach(setSlidePosition);
 
-        const elements = document.querySelectorAll('h1, h2, h4, h3 p, figcaption, nav a');
-        let flashlightZIndex = -1; // Initial z-index for the flashlight
+    const moveToSlide = (track, currentSlide, targetSlide) => {
+        track.style.transform = `translateX(-${targetSlide.style.left})`;
+        currentSlide.classList.remove('current-slide');
+        targetSlide.classList.add('current-slide');
+    };
 
-        elements.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            const flashlightRect = flashlight.getBoundingClientRect();
-            const isIntersecting = !(rect.right < flashlightRect.left || 
-                                      rect.left > flashlightRect.right || 
-                                      rect.bottom < flashlightRect.top || 
-                                      rect.top > flashlightRect.bottom);
+    prevButton.addEventListener('click', e => {
+        const currentSlide = track.querySelector('.current-slide');
+        const prevSlide = currentSlide.previousElementSibling;
+        
+        if (prevSlide) {
+            moveToSlide(track, currentSlide, prevSlide);
+        }
+    });
 
-            if (isIntersecting) {
-                const letters = el.textContent.split('');
-                el.innerHTML = '';
-                letters.forEach(letter => {
-                    const span = document.createElement('span');
-                    span.textContent = letter;
-                    el.appendChild(span);
-                });
-                el.querySelectorAll('span').forEach(span => {
-                    const spanRect = span.getBoundingClientRect();
-                    const isSpanIntersecting = !(spanRect.right < flashlightRect.left || 
-                                                 spanRect.left > flashlightRect.right || 
-                                                 spanRect.bottom < flashlightRect.top || 
-                                                 spanRect.top > flashlightRect.bottom);
-
-                    span.style.color = isSpanIntersecting ? '#000' : '#fff';
-                    span.style.backgroundColor = isSpanIntersecting ? '#FFD37E' : 'transparent';
-
-                    // Adjust the z-index of the flashlight based on its position relative to the text elements
-                    if (isSpanIntersecting) {
-                        flashlightZIndex = Math.max(flashlightZIndex, parseInt(el.style.zIndex || 0) - 1);
-                    }
-                });
-            } else {
-                el.innerHTML = el.textContent;
-                el.style.color = '#fff';
-            }
-        });
-
-        // Set the z-index of the flashlight to be below the text elements it's hovering over
-        flashlight.style.zIndex = flashlightZIndex;
+    nextButton.addEventListener('click', e => {
+        const currentSlide = track.querySelector('.current-slide');
+        const nextSlide = currentSlide.nextElementSibling;
+        
+        if (nextSlide) {
+            moveToSlide(track, currentSlide, nextSlide);
+        }
     });
 });
