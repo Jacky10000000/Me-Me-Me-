@@ -1,11 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leonardo Castillo</title>
+    <script src="code.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
+
+        /* Scoped styles for the newspaper look */
+        .newspaper {
+            background: #F4E3CD; /* Newspaper-like background */
+            color: #000; /* Default text color */
+            font-family: 'Times New Roman', serif; /* Typical newspaper font */
+            line-height: 1.6;
+        }
+
+        .newspaper h1, .newspaper h2, .newspaper h3, .newspaper h4, .newspaper p, .newspaper figcaption, .newspaper nav a {
+            color: #000; /* Ensure text is black */
+        }
+
+        .flashlight {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.8); /* Black flashlight */
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 50%;
+        }
+
+        /* Bounce animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .newspaper a:hover {
+            color: #F4E3CD; /* Change to your desired highlight color */
+            animation: bounce 0.5s;
+        }
+
+        .newspaper button:hover {
+            background-color: #F4E3CD; /* Change to your desired highlight color */
+            animation: bounce 0.5s;
+        }
+
+        .large-image {
+            width: 275px;
+            height: auto; /* Maintain aspect ratio */
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+    </style>
 </head>
-<body>
+
+<body class="newspaper">
     <section class="whatDuHell?">
         <h1>Projects</h1>
         <h3>Roblox Studio</h3>
@@ -22,21 +82,89 @@
 
     <section>
         <h3>Joe Goes to Work</h3>
-        <img src="Icons/903479.png" alt="case">
+        <img class="large-image" src="Icons/903479.png" alt="case">
         <p>This is my unfinished text adventure, my first attempt at making a full fledged game.</p>
         <a href="joeGoesWork.html"> Explore</a>
 
 
         <h3>Chuck Goes for a Walk</h3>
-        <img src="Icons/414748-200.png" alt="Hat">
+        <img class="large-image" src="Icons/414748-200.png" alt="Hat">
         <p>A Story that's still definetly in a work in progress I hope to make it a full fledged comic.</p>
         <a href="chuckGoesWalking.html"> Explore</a>
 
         <h3>High Rise</h3>
-        <img src="Icons/74a1ca1d638c50a4a825cfaafa6e65db-wild-west-gun-icon.webp" alt="Rifle">
+        <img class="large-image" src="Icons/74a1ca1d638c50a4a825cfaafa6e65db-wild-west-gun-icon.webp" alt="Rifle">
         <p>Tower Defense Game that's currently a work in progress.</p>
         <a href="highRise.html"> Explore</a>
 
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const scene = document.querySelector('.scene');
+            const navSection = document.querySelector('.nav');
+            const mythSection = document.querySelector('.theMyth');
+
+            if (scene && navSection && mythSection) {
+                scene.addEventListener('animationend', function () {
+                    navSection.classList.remove('hidden');
+                    mythSection.classList.remove('hidden');
+                });
+            }
+
+            const flashlight = document.createElement('div');
+            flashlight.classList.add('flashlight');
+            document.body.appendChild(flashlight);
+
+            document.addEventListener('mousemove', function (e) {
+                flashlight.style.left = `${e.pageX - flashlight.offsetWidth / 2}px`;
+                flashlight.style.top = `${e.pageY - flashlight.offsetHeight / 2}px`;
+
+                const elements = document.querySelectorAll('h1, h2, h3, h4, p, figcaption, nav a');
+                let flashlightZIndex = -1; // Initial z-index for the flashlight
+
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const flashlightRect = flashlight.getBoundingClientRect();
+                    const isIntersecting = !(rect.right < flashlightRect.left ||
+                        rect.left > flashlightRect.right ||
+                        rect.bottom < flashlightRect.top ||
+                        rect.top > flashlightRect.bottom);
+
+                    if (isIntersecting) {
+                        const letters = el.textContent.split('');
+                        el.innerHTML = '';
+                        letters.forEach(letter => {
+                            const span = document.createElement('span');
+                            span.textContent = letter;
+                            el.appendChild(span);
+                        });
+                        el.querySelectorAll('span').forEach(span => {
+                            const spanRect = span.getBoundingClientRect();
+                            const isSpanIntersecting = !(spanRect.right < flashlightRect.left ||
+                                spanRect.left > flashlightRect.right ||
+                                spanRect.bottom < flashlightRect.top ||
+                                spanRect.top > flashlightRect.bottom);
+
+                            span.style.color = isSpanIntersecting ? '#F4E3CD' : '#000'; // Highlighted text is white, otherwise black
+                            span.style.backgroundColor = isSpanIntersecting ? '#000' : 'transparent'; // Highlighted background is black, otherwise transparent
+
+                            // Adjust the z-index of the flashlight based on its position relative to the text elements
+                            if (isSpanIntersecting) {
+                                flashlightZIndex = Math.max(flashlightZIndex, parseInt(el.style.zIndex || 0) - 1);
+                            }
+                        });
+                    } else {
+                        el.innerHTML = el.textContent;
+                        el.style.color = '#000'; // Default text color
+                    }
+                });
+
+                // Set the z-index of the flashlight to be below the text elements it's hovering over
+                flashlight.style.zIndex = flashlightZIndex;
+            });
+        });
+    </script>
 </body>
+
 </html>

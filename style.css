@@ -163,6 +163,10 @@ body {
     border-radius: 50%;
 }
 
+*{
+    cursor: none;
+}
+
 .theMyth {
     position: absolute;
     top: 20%;
@@ -228,4 +232,55 @@ body {
 
 .next {
     right: 10px;
+}
+
+/*------------------------------------
+             LINK EMPHASIS
+--------------------------------------*/
+
+/* Define the bounce animation */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Apply the hover effect to links */
+a:hover {
+    color: #000000; /* Change to your desired highlight color */
+    animation: bounce 0.5s;
+}
+
+/* Apply the hover effect to buttons */
+button:hover {
+    background-color: #ffd37e; /* Change to your desired highlight color */
+    animation: bounce 0.5s;
+}
+
+
+/*-----------------------------------
+            CHUCK ALIGNMENT
+------------------------------------*/
+
+.intro {
+    text-align: center;
+    padding: 20px;
+}
+
+.figcaption {
+    text-align: center; /* Ensure the caption is also centered */
+}
+
+.title {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }

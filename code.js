@@ -140,17 +140,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const slides = Array.from(track.children);
     const nextButton = document.querySelector('.next');
     const prevButton = document.querySelector('.prev');
+    const carouselTitle = document.getElementById('carousel-title');
     
+    const titles = ['Chuck Greener', 'Alice Lancaster', 'Lilly Mayflower']; // Titles corresponding to each slide
+
     const setSlidePosition = (slide, index) => {
         slide.style.left = `${index * 100}%`;
     };
 
     slides.forEach(setSlidePosition);
 
-    const moveToSlide = (track, currentSlide, targetSlide) => {
+    const updateTitle = (index) => {
+        carouselTitle.textContent = titles[index];
+    };
+
+    const moveToSlide = (track, currentSlide, targetSlide, targetIndex) => {
         track.style.transform = `translateX(-${targetSlide.style.left})`;
         currentSlide.classList.remove('current-slide');
         targetSlide.classList.add('current-slide');
+        updateTitle(targetIndex); // Update the title based on the new slide index
     };
 
     prevButton.addEventListener('click', e => {
@@ -158,7 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const prevSlide = currentSlide.previousElementSibling;
         
         if (prevSlide) {
-            moveToSlide(track, currentSlide, prevSlide);
+            const prevIndex = slides.indexOf(prevSlide);
+            moveToSlide(track, currentSlide, prevSlide, prevIndex);
         }
     });
 
@@ -167,7 +176,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextSlide = currentSlide.nextElementSibling;
         
         if (nextSlide) {
-            moveToSlide(track, currentSlide, nextSlide);
+            const nextIndex = slides.indexOf(nextSlide);
+            moveToSlide(track, currentSlide, nextSlide, nextIndex);
         }
     });
+
+    // Initialize the title with the first slide
+    updateTitle(0);
 });
