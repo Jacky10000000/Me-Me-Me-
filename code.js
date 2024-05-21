@@ -64,18 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 FLASHLIGHT FUNCTION 
  -------------------------------------------------*/
 
-document.addEventListener('DOMContentLoaded', function() {
-    const scene = document.querySelector('.scene');
-    const navSection = document.querySelector('.nav');
-    const mythSection = document.querySelector('.theMyth');
-
-    if (scene && navSection && mythSection) {
-        scene.addEventListener('animationend', function() {
-            navSection.classList.remove('hidden');
-            mythSection.classList.remove('hidden');
-        });
-    }
-
+ document.addEventListener('DOMContentLoaded', function() {
     const flashlight = document.createElement('div');
     flashlight.classList.add('flashlight');
     document.body.appendChild(flashlight);
@@ -85,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         flashlight.style.top = `${e.pageY - flashlight.offsetHeight / 2}px`;
 
         const elements = document.querySelectorAll('h1, h2, h3, h4, p, figcaption, nav a');
-        let flashlightZIndex = -1; // Initial z-index for the flashlight
+        let flashlightZIndex = -1;
 
         elements.forEach(el => {
             const rect = el.getBoundingClientRect();
@@ -94,40 +83,37 @@ document.addEventListener('DOMContentLoaded', function() {
                                       rect.left > flashlightRect.right || 
                                       rect.bottom < flashlightRect.top || 
                                       rect.top > flashlightRect.bottom);
-
-            if (isIntersecting) {
-                const letters = el.textContent.split('');
-                el.innerHTML = '';
-                letters.forEach(letter => {
-                    const span = document.createElement('span');
-                    span.textContent = letter;
-                    el.appendChild(span);
-                });
-                el.querySelectorAll('span').forEach(span => {
-                    const spanRect = span.getBoundingClientRect();
-                    const isSpanIntersecting = !(spanRect.right < flashlightRect.left || 
-                                                 spanRect.left > flashlightRect.right || 
-                                                 spanRect.bottom < flashlightRect.top || 
-                                                 spanRect.top > flashlightRect.bottom);
-
-                    span.style.color = isSpanIntersecting ? '#000' : '#fff';
-                    span.style.backgroundColor = isSpanIntersecting ? '#FFD37E' : 'transparent';
-
-                    // Adjust the z-index of the flashlight based on its position relative to the text elements
-                    if (isSpanIntersecting) {
-                        flashlightZIndex = Math.max(flashlightZIndex, parseInt(el.style.zIndex || 0) - 1);
-                    }
-                });
-            } else {
-                el.innerHTML = el.textContent;
-                el.style.color = '#fff';
-            }
-        });
-
-        // Set the z-index of the flashlight to be below the text elements it's hovering over
-        flashlight.style.zIndex = flashlightZIndex;
-    });
-});
+                                      if (isIntersecting) {
+                                        const letters = el.textContent.split('');
+                                        el.innerHTML = '';
+                                        letters.forEach(letter => {
+                                            const span = document.createElement('span');
+                                            span.textContent = letter;
+                                            el.appendChild(span);
+                                        });
+                                        el.querySelectorAll('span').forEach(span => {
+                                            const spanRect = span.getBoundingClientRect();
+                                            const isSpanIntersecting = !(spanRect.right < flashlightRect.left || 
+                                                                         spanRect.left > flashlightRect.right || 
+                                                                         spanRect.bottom < flashlightRect.top || 
+                                                                         spanRect.top > flashlightRect.bottom);
+                        
+                                            span.style.color = isSpanIntersecting ? '#000' : '#fff';
+                                            span.style.backgroundColor = isSpanIntersecting ? '#FFD37E' : 'transparent';
+                        
+                                            if (isSpanIntersecting) {
+                                                flashlightZIndex = Math.max(flashlightZIndex, parseInt(el.style.zIndex || 0) - 1);
+                                            }
+                                        });
+                                    } else {
+                                        el.innerHTML = el.textContent;
+                                        el.style.color = '#fff';
+                                    }
+                                });
+                        
+                                flashlight.style.zIndex = flashlightZIndex;
+                            });
+                        });
 
 /*-------------------------------------------------------------------------
                                   CARASEL
@@ -183,4 +169,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize the title with the first slide
     updateTitle(0);
+});
+
+/*------------------------------------------
+            CONTACT MECHANIC
+--------------------------------------------*/
+
+document.addEventListener('DOMContentLoaded', function() {
+    const emailForm = document.getElementById('emailForm');
+
+    emailForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(emailForm);
+
+        fetch('send_email.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+/*------------------------------------------
+            NEWSPAPER
+--------------------------------------------*/
+
+document.addEventListener('DOMContentLoaded', function() {
+    const links = document.querySelectorAll('nav a');
+
+    links.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const href = this.getAttribute('href');
+            console.log('Link clicked:', href);
+
+            const content = document.getElementById('content');
+            content.classList.add('slide-out');
+            console.log('Slide-out class added to content');
+
+            content.addEventListener('animationend', function() {
+                console.log('Animation ended, navigating to:', href);
+                window.location.href = href;
+            }, { once: true }); // Ensure the event listener is called only once
+        });
+    });
 });
