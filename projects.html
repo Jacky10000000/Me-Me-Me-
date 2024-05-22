@@ -5,68 +5,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leonardo Castillo</title>
-    <script src="code.js"></script>
+    <script src="code.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
 
-        /* Scoped styles for the newspaper look */
-        .newspaper {
-            background: #F4E3CD; /* Newspaper-like background */
-            color: #000; /* Default text color */
-            font-family: 'Times New Roman', serif; /* Typical newspaper font */
-            line-height: 1.6;
-        }
-
-        .newspaper h1, .newspaper h2, .newspaper h3, .newspaper h4, .newspaper p, .newspaper figcaption, .newspaper nav a {
-            color: #000; /* Ensure text is black */
-        }
-
-        .flashlight {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(0, 0, 0, 0.8); /* Black flashlight */
-            pointer-events: none;
-            z-index: 10;
-            border-radius: 50%;
-        }
-
-        /* Bounce animation */
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
+            .newspaper {
+                background: #F4E3CD;
+                color: #000;
+                font-family: 'Times New Roman', serif;
+                line-height: 1.6;
+                position: relative;
+                /* Add this line */
             }
-            40% {
-                transform: translateY(-10px);
+
+            .newspaper h1,
+            .newspaper h2,
+            .newspaper h3,
+            .newspaper h4,
+            .newspaper p,
+            .newspaper figcaption,
+            .newspaper nav a {
+                color: #000;
             }
-            60% {
-                transform: translateY(-5px);
+
+            .flashlight {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                background: rgba(0, 0, 0, 0.8);
+                pointer-events: none;
+                z-index: 10;
+                border-radius: 50%;
             }
-        }
 
-        .newspaper a:hover {
-            color: #F4E3CD; /* Change to your desired highlight color */
-            animation: bounce 0.5s;
-        }
+            @keyframes bounce {
 
-        .newspaper button:hover {
-            background-color: #F4E3CD; /* Change to your desired highlight color */
-            animation: bounce 0.5s;
-        }
+                0%,
+                20%,
+                50%,
+                80%,
+                100% {
+                    transform: translateY(0);
+                }
 
-        .large-image {
-            width: 275px;
-            height: auto; /* Maintain aspect ratio */
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+                40% {
+                    transform: translateY(-10px);
+                }
 
-    </style>
+                60% {
+                    transform: translateY(-5px);
+                }
+            }
+
+            .newspaper a:hover {
+                color: #F4E3CD;
+                animation: bounce 0.5s;
+            }
+
+            .newspaper button:hover {
+                background-color: #F4E3CD;
+                animation: bounce 0.5s;
+            }
+
+            .newspaper span {
+                color: #fff;
+                /* Set the default color to white */
+            }
+
+            .newspaper span:hover {
+                color: #000;
+                /* Set the color to black when hovered over */
+            }
+
+            .large-image {
+                width: 275px;
+                height: auto;
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+
+                to {
+                    transform: translateX(-100%);
+                    opacity: 0;
+                }
+            }
+
+            .slide-out {
+                animation: slideOut 0.5s forwards;
+            }
+        </style>
 </head>
 
+<div id="content" class="newspaper">
+
 <body class="newspaper">
-    <div id="content" class="newspaper">
     <section class="whatDuHell?">
         <h1>Projects</h1>
         <h3>Roblox Studio</h3>
@@ -75,44 +114,46 @@
         <h3>JavaScript</h3>
         <h3>Art</h3>
         <nav>
-            <a href="resume.html"> Suspect</a>
-            <a href="projects.html"> Scheme's </a>
-            <a href="wanted.html"> Report</a>
+            <a href="resume.html" class="nav-link">Suspect</a>
+            <a href="projects.html" class="nav-link">Schemes</a>
+            <a href="wanted.html" class="nav-link">Report</a>
         </nav>
-    </Section>
+    </section>
 
     <section>
         <h3>Joe Goes to Work</h3>
         <img class="large-image" src="Icons/903479.png" alt="case">
         <p>This is my unfinished text adventure, my first attempt at making a full fledged game.</p>
-        <a href="joeGoesWork.html"> Explore</a>
-
+        <a href="joeGoesWork.html">Explore</a>
 
         <h3>Chuck Goes for a Walk</h3>
         <img class="large-image" src="Icons/414748-200.png" alt="Hat">
-        <p>A Story that's still definetly in a work in progress I hope to make it a full fledged comic.</p>
-        <a href="chuckGoesWalking.html"> Explore</a>
+        <p>A Story that's still definitely in a work in progress I hope to make it a full fledged comic.</p>
+        <a href="chuckGoesWalking.html">Explore</a>
 
         <h3>High Rise</h3>
         <img class="large-image" src="Icons/74a1ca1d638c50a4a825cfaafa6e65db-wild-west-gun-icon.webp" alt="Rifle">
         <p>Tower Defense Game that's currently a work in progress.</p>
-        <a href="highRise.html"> Explore</a>
-
+        <a href="highRise.html">Explore</a>
     </section>
-</div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const scene = document.querySelector('.scene');
-            const navSection = document.querySelector('.nav');
-            const mythSection = document.querySelector('.theMyth');
+            const links = document.querySelectorAll('.nav-link');
+            const content = document.getElementById('content');
 
-            if (scene && navSection && mythSection) {
-                scene.addEventListener('animationend', function () {
-                    navSection.classList.remove('hidden');
-                    mythSection.classList.remove('hidden');
+            links.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const href = this.getAttribute('href');
+
+                    content.classList.add('slide-out');
+                    content.addEventListener('animationend', function () {
+                        window.location.href = href;
+                    }, { once: true });
                 });
-            }
+            });
 
+            // Add the flashlight function here
             const flashlight = document.createElement('div');
             flashlight.classList.add('flashlight');
             document.body.appendChild(flashlight);
@@ -122,7 +163,7 @@
                 flashlight.style.top = `${e.pageY - flashlight.offsetHeight / 2}px`;
 
                 const elements = document.querySelectorAll('h1, h2, h3, h4, p, figcaption, nav a');
-                let flashlightZIndex = -1; // Initial z-index for the flashlight
+                let flashlightZIndex = -1;
 
                 elements.forEach(el => {
                     const rect = el.getBoundingClientRect();
@@ -131,7 +172,6 @@
                         rect.left > flashlightRect.right ||
                         rect.bottom < flashlightRect.top ||
                         rect.top > flashlightRect.bottom);
-
                     if (isIntersecting) {
                         const letters = el.textContent.split('');
                         el.innerHTML = '';
@@ -147,25 +187,24 @@
                                 spanRect.bottom < flashlightRect.top ||
                                 spanRect.top > flashlightRect.bottom);
 
-                            span.style.color = isSpanIntersecting ? '#F4E3CD' : '#000'; // Highlighted text is white, otherwise black
-                            span.style.backgroundColor = isSpanIntersecting ? '#000' : 'transparent'; // Highlighted background is black, otherwise transparent
+                            span.style.color = isSpanIntersecting ? '#000' : '#fff';
+                            span.style.backgroundColor = isSpanIntersecting ? '#FFD37E' : 'transparent';
 
-                            // Adjust the z-index of the flashlight based on its position relative to the text elements
                             if (isSpanIntersecting) {
                                 flashlightZIndex = Math.max(flashlightZIndex, parseInt(el.style.zIndex || 0) - 1);
                             }
                         });
                     } else {
                         el.innerHTML = el.textContent;
-                        el.style.color = '#000'; // Default text color
+                        el.style.color = '#fff';
                     }
                 });
 
-                // Set the z-index of the flashlight to be below the text elements it's hovering over
                 flashlight.style.zIndex = flashlightZIndex;
             });
         });
     </script>
+    </div>
 </body>
 
 </html>

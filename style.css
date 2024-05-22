@@ -317,5 +317,5 @@ button:hover {
 }
 
 .slide-out {
-    animation: slideOut 0.5s ease-in;
+    animation: slideOut 0.5s forwards;
 }

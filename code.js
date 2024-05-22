@@ -65,6 +65,21 @@ document.addEventListener('DOMContentLoaded', function() {
  -------------------------------------------------*/
 
  document.addEventListener('DOMContentLoaded', function() {
+    const scene = document.getElementById('scene');
+    const character = scene.querySelector('.character');
+    const theMyth = document.getElementById('theMyth');
+    const nav = document.getElementById('nav');
+
+    character.addEventListener('animationend', function() {
+        theMyth.classList.remove('hidden');
+        theMyth.classList.add('visible');
+        nav.classList.remove('hidden');
+        nav.classList.add('visible');
+    });
+});
+
+
+ document.addEventListener('DOMContentLoaded', function() {
     const flashlight = document.createElement('div');
     flashlight.classList.add('flashlight');
     document.body.appendChild(flashlight);
@@ -200,24 +215,3 @@ document.addEventListener('DOMContentLoaded', function() {
 /*------------------------------------------
             NEWSPAPER
 --------------------------------------------*/
-
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('nav a');
-
-    links.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const href = this.getAttribute('href');
-            console.log('Link clicked:', href);
-
-            const content = document.getElementById('content');
-            content.classList.add('slide-out');
-            console.log('Slide-out class added to content');
-
-            content.addEventListener('animationend', function() {
-                console.log('Animation ended, navigating to:', href);
-                window.location.href = href;
-            }, { once: true }); // Ensure the event listener is called only once
-        });
-    });
-});
